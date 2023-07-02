@@ -1,8 +1,8 @@
 <script setup>
 import { normalizeClass, ref } from "vue";
-const ip1 = ref(10);
-const ip2 = ref(0);
-const ip3 = ref(0);
+const ip1 = ref(200);
+const ip2 = ref(200);
+const ip3 = ref(200);
 const ip4 = ref(0);
 let contador = 0;
   let indice = 0;
@@ -13,39 +13,67 @@ const quito = ref(0)
 let rango = 0;
 let ipC = '';
 let ipA = '';
+let ipB = '';
 const array = ref([])
 const subred = ref(0);
 const subRedValido = ref(0);
+let valorA = 0;
 
 const generar = () => {
+  quitar();
+  subred.value = Math.pow(2, quito.value);
+  rango = 256/subred.value;
+  
   verificarClase();
-  generarSubA();
-  //generarSubB();
-  //generarSubC();
+  
   claseIP.value = "La clase IP: "+claseIP.value
 };
 
 const verificarClase=()=>{
   if(ip1.value<128 && ip1.value>0){
     claseIP.value="A"
+    valorA=24;
+    generarSubA();
   }else if(ip1.value<192 && ip1.value >127){
     claseIP.value="B"
+    valorA=16
+    generarSubB();
   }else if(ip1.value<224 && ip1.value>191){
     claseIP.value="C"
+    valorA = 8;
+    generarSubC();
   }else if(ip1.value<226 && ip1.value>223){
-    claseIP.value="A"
+    claseIP.value="D - Aqui no se puede generar subredes"
   }else{
     claseIP.value="INVALIDA"
   }
 }
-
+//falta optimizar
+const quitar=()=>{
+  if(numSubRedes.value >0 && numSubRedes.value <= 2){
+    quito.value = 1
+  }else if(numSubRedes.value > 2 &&numSubRedes.value <=4){
+    quito.value = 2
+  }else if(numSubRedes.value > 4 &&numSubRedes.value <=8){
+    quito.value = 3
+  }else if(numSubRedes.value > 8 &&numSubRedes.value <=16){
+    quito.value = 4
+}else if(numSubRedes.value > 16 &&numSubRedes.value <=32){
+  quito.value = 5
+}else if(numSubRedes.value > 32 &&numSubRedes.value <=64){
+  quito.value = 6
+}else if(numSubRedes.value > 64 &&numSubRedes.value <=128){
+  quito.value = 7
+}else if(numSubRedes.value > 128 &&numSubRedes.value <=256){
+  quito.value = 8
+}
+}
 
 const generarSubC=()=>{
-  subred.value = Math.pow(2, quito.value);
-  rango = 256/subred.value;
+  
   ipC = ip1.value+'.'+ip2.value+'.'+ip3.value+'.'
   
-  console.log(rango)
+  console.log(subred.value)
 
   subRedValido.value = subred.value-2;
   
@@ -64,8 +92,7 @@ const generarSubC=()=>{
   }
 }
 const generarSubA=()=>{
-  subred.value = Math.pow(2, quito.value);
-  rango = 256/subred.value;
+
   ipA = ip1.value+'.';
   
   subRedValido.value = subred.value-2;
@@ -87,9 +114,8 @@ const generarSubA=()=>{
 }
 
 const generarSubB=()=>{
-  subred.value = Math.pow(2, quito.value);
-  rango = 256/subred.value;
-  ipA = ip1.value+'.';
+
+  ipB = ip1.value+'.'+ip2.value+'.';
   
   subRedValido.value = subred.value-2;
 
@@ -101,9 +127,9 @@ const generarSubB=()=>{
     
     array.value.push({
       Nro: i+1,
-      subRed: ipA+''+contador+'.'+ip3.value+'.'+ip4.value,
-      ipsConfigurables: ipA+contador+'.'+0+'.'+1+'    -     '+ipA+despues+'.'+255+'.'+254,
-      broadcast: ipA+despues+".255"+"255",
+      subRed: ipB+''+contador+'.'+ip4.value,
+      ipsConfigurables: ipB+''+contador+'.'+1+'    -     '+ipB+despues+'.'+254,
+      broadcast: ipB+despues+".255",
     })
     contador = contador+rango; 
   }
@@ -112,10 +138,6 @@ const generarSubB=()=>{
 const refrescar=()=>{
   location.reload();
 }
-
-
-
-
 
 </script>
 
@@ -162,14 +184,6 @@ const refrescar=()=>{
           <input
             type="number"
             v-model="numSubRedes"
-            class="form-control form-control-sm rounded col-1"
-          />
-        </div>
-        <h4>QUITO:</h4>
-        <div class="col-1">
-          <input
-            type="number"
-            v-model="quito"
             class="form-control form-control-sm rounded col-1"
           />
         </div>
