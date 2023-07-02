@@ -1,8 +1,8 @@
 <script setup>
 import { normalizeClass, ref } from "vue";
-const ip1 = ref(200);
-const ip2 = ref(200);
-const ip3 = ref(200);
+const ip1 = ref(10);
+const ip2 = ref(0);
+const ip3 = ref(0);
 const ip4 = ref(0);
 let contador = 0;
   let indice = 0;
@@ -12,13 +12,16 @@ const claseIP = ref(" ");
 const quito = ref(0)
 let rango = 0;
 let ipC = '';
+let ipA = '';
 const array = ref([])
 const subred = ref(0);
 const subRedValido = ref(0);
 
 const generar = () => {
   verificarClase();
-  generarSubC();
+  generarSubA();
+  //generarSubB();
+  //generarSubC();
   claseIP.value = "La clase IP: "+claseIP.value
 };
 
@@ -63,22 +66,21 @@ const generarSubC=()=>{
 const generarSubA=()=>{
   subred.value = Math.pow(2, quito.value);
   rango = 256/subred.value;
-  ipC = ip1.value+'.'+ip2.value+'.'+ip3.value+'.'
+  ipA = ip1.value+'.';
   
-  console.log(rango)
-
   subRedValido.value = subred.value-2;
+
   
   for(let i = 0;i<subred.value;i++){
     
     indice = contador+1;
-    despues = contador +rango-2;
+    despues = contador +rango-1;
     
     array.value.push({
       Nro: i+1,
-      subRed: ipC+''+contador,
-      ipsConfigurables: ipC+indice+'    -     '+ipC+despues,
-      broadcast: ipC+(despues +1),
+      subRed: ipA+''+contador+'.'+ip3.value+'.'+ip4.value,
+      ipsConfigurables: ipA+contador+'.'+0+'.'+1+'    -     '+ipA+despues+'.'+255+'.'+254,
+      broadcast: ipA+despues+".255"+"255",
     })
     contador = contador+rango; 
   }
@@ -87,26 +89,30 @@ const generarSubA=()=>{
 const generarSubB=()=>{
   subred.value = Math.pow(2, quito.value);
   rango = 256/subred.value;
-  ipC = ip1.value+'.'+ip2.value+'.'+ip3.value+'.'
+  ipA = ip1.value+'.';
   
-  console.log(rango)
-
   subRedValido.value = subred.value-2;
+
   
   for(let i = 0;i<subred.value;i++){
     
     indice = contador+1;
-    despues = contador +rango-2;
+    despues = contador +rango-1;
     
     array.value.push({
       Nro: i+1,
-      subRed: ipC+''+contador,
-      ipsConfigurables: ipC+indice+'    -     '+ipC+despues,
-      broadcast: ipC+(despues +1),
+      subRed: ipA+''+contador+'.'+ip3.value+'.'+ip4.value,
+      ipsConfigurables: ipA+contador+'.'+0+'.'+1+'    -     '+ipA+despues+'.'+255+'.'+254,
+      broadcast: ipA+despues+".255"+"255",
     })
     contador = contador+rango; 
   }
 }
+
+const refrescar=()=>{
+  location.reload();
+}
+
 
 
 
@@ -170,6 +176,7 @@ const generarSubB=()=>{
       </div>
       <br />
       <button type="submit" @click="generar" class="btn btn-primary">Generar</button>
+      <button type="submit" @click="refrescar" class="btn btn-success">Resetear</button>
     </form>
 
     <h3>{{ claseIP }}</h3>
