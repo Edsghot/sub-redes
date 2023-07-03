@@ -143,6 +143,10 @@ const refrescar=()=>{
 
 <template>
   <div class="container">
+    <br/>
+    <img src="./assets/logoPagina.png" width="300">
+    <br/>
+    <br/>
     <form onsubmit="event.preventDefault();">
       <div class="form-group">
         <h4 class="mt-2">Digite su IP:</h4>
@@ -219,7 +223,14 @@ const refrescar=()=>{
 
 <style>
 body {
-  background-color: grey;
+  background-color: #101652;
+}
+
+h2{
+  color: #207178;
+}
+h4{
+  color: #edeccf;
 }
 .input-custom-size {
   padding: 0.375rem 0.75rem;
