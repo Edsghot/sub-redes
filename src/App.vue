@@ -18,6 +18,8 @@ const array = ref([])
 const subred = ref(0);
 const subRedValido = ref(0);
 let valorA = 0;
+let mascara = ''
+let mascaraIp = 0;
 
 const generar = () => {
   quitar();
@@ -28,18 +30,20 @@ const generar = () => {
   
   claseIP.value = "La clase IP: "+claseIP.value
 };
-
 const verificarClase=()=>{
   if(ip1.value<128 && ip1.value>0){
     claseIP.value="A"
     valorA=24;
+    mascara = '255.'+mascaraIp+'.0.0'
     generarSubA();
   }else if(ip1.value<192 && ip1.value >127){
     claseIP.value="B"
     valorA=16
+    mascara = '255.255.'+mascaraIp+'.0'
     generarSubB();
   }else if(ip1.value<224 && ip1.value>191){
     claseIP.value="C"
+    mascara = '255.255.255.'+mascaraIp
     valorA = 8;
     generarSubC();
   }else if(ip1.value<226 && ip1.value>223){
@@ -50,22 +54,30 @@ const verificarClase=()=>{
 }
 //falta optimizar
 const quitar=()=>{
-  if(numSubRedes.value >0 && numSubRedes.value <= 2){
+  if(numSubRedes.value >0 && numSubRedes.value < 2){
     quito.value = 1
-  }else if(numSubRedes.value > 2 &&numSubRedes.value <=4){
+    mascaraIp = 192;
+  }else if(numSubRedes.value >= 2 &&numSubRedes.value <4){
     quito.value = 2
-  }else if(numSubRedes.value > 4 &&numSubRedes.value <=8){
+    mascaraIp = 224;
+  }else if(numSubRedes.value >= 4 &&numSubRedes.value <8){
     quito.value = 3
-  }else if(numSubRedes.value > 8 &&numSubRedes.value <=16){
+    mascaraIp = 240;
+  }else if(numSubRedes.value >= 8 &&numSubRedes.value <16){
     quito.value = 4
-}else if(numSubRedes.value > 16 &&numSubRedes.value <=32){
+    mascaraIp = 248;
+}else if(numSubRedes.value >= 16 &&numSubRedes.value <32){
   quito.value = 5
-}else if(numSubRedes.value > 32 &&numSubRedes.value <=64){
+  mascaraIp = 248;
+}else if(numSubRedes.value >= 32 &&numSubRedes.value <64){
   quito.value = 6
-}else if(numSubRedes.value > 64 &&numSubRedes.value <=128){
+  mascaraIp = 252;
+}else if(numSubRedes.value >= 64 &&numSubRedes.value <128){
   quito.value = 7
-}else if(numSubRedes.value > 128 &&numSubRedes.value <=256){
+  mascaraIp = 254;
+}else if(numSubRedes.value >= 128 &&numSubRedes.value <256){
   quito.value = 8
+  mascaraIp = 255;
 }
 }
 
@@ -197,7 +209,10 @@ const refrescar=()=>{
       <button type="submit" @click="refrescar" class="btn btn-success">Resetear</button>
     </form>
 
+    <h3>MASCARA: {{ mascara }}</h3>
     <h3>{{ claseIP }}</h3>
+    <h3>subred: {{ subred }}</h3>
+    <h3>subred valido: {{ subRedValido }}</h3>
     <div class="container">
     <table class="table">
       <thead class="thead-dark">
@@ -217,7 +232,9 @@ const refrescar=()=>{
         </tr>
       </tbody>
     </table>
-  </div>
+    <!---<h3> Cantidad de subredes validos: {{  subRedValido}}</h3>
+      -->
+    </div>
   </div>
 </template>
 
@@ -230,6 +247,10 @@ h2{
   color: #207178;
 }
 h4{
+  color: #edeccf;
+}
+
+h3{
   color: #edeccf;
 }
 .input-custom-size {
