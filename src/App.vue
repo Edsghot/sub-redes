@@ -17,7 +17,6 @@ let ipB = '';
 const array = ref([])
 const subred = ref(0);
 const subRedValido = ref(0);
-let valorA = 0;
 let mascara = ''
 let mascaraIp = 0;
 
@@ -154,7 +153,7 @@ const refrescar=()=>{
 </script>
 
 <template>
-  <div class="container">
+    <div class="container">
     <br/>
     <img src="./assets/logoPagina.png" width="300">
     <br/>
@@ -213,8 +212,20 @@ const refrescar=()=>{
     <h3>{{ claseIP }}</h3>
     <h3>subred: {{ subred }}</h3>
     <h3>subred valido: {{ subRedValido }}</h3>
-    <div class="container">
-    <table class="table">
+   
+   
+    
+    <!---<h3> Cantidad de subredes validos: {{  subRedValido}}</h3>
+      -->
+    </div>
+
+  <div class="SegundoLado">
+        <p style="border: 2px solid; color: aliceblue;">
+           Contenido del párrafo con borde
+       </p>
+      </div>
+
+  <table class="table">
       <thead class="thead-dark">
         <tr>
           <th>Nro</th>
@@ -232,13 +243,14 @@ const refrescar=()=>{
         </tr>
       </tbody>
     </table>
-    <!---<h3> Cantidad de subredes validos: {{  subRedValido}}</h3>
-      -->
-    </div>
-  </div>
+
 </template>
 
 <style>
+
+.container{
+  border: 1px solid #fff;
+}
 body {
   background-color: #101652;
 }
